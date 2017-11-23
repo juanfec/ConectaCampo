@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "718173997880",
+    "firebase_url": "https://conectacampo-34487.firebaseio.com",
+    "project_id": "conectacampo-34487",
+    "storage_bucket": "conectacampo-34487.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718173997880:android:e767202d1f651c45",
+        "android_client_info": {
+          "package_name": "co.edu.uis.conectacampo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "718173997880-mij2c03kg1i0bg629el6lasmcl4clf2t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.edu.uis.conectacampo",
+            "certificate_hash": "0a2fac188fa385619c4c080bd3f62ff72910b04a"
+          }
+        },
+        {
+          "client_id": "718173997880-21cn6docm463c0hjj367qu2cr0906hkb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEWUNEZVNlxhSBXClP5dQhn6glteN35BM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "718173997880-21cn6docm463c0hjj367qu2cr0906hkb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
