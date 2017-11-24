@@ -28,13 +28,13 @@ public class ProductosViewHolder extends RecyclerView.ViewHolder {
     public void setNombre(String nombre)
     {
         TextView nombreproducto = mView.findViewById(R.id.nombre_producto);
-        nombreproducto.setText(nombre);
+        nombreproducto.setText(nombre );
 
     }
 
     public void setPrecio(String precio){
         TextView precioproducto = mView.findViewById(R.id.precioproducto);
-        precioproducto.setText(precio);
+        precioproducto.setText(precio + " libra");
     }
 
     public void setUser(String user){

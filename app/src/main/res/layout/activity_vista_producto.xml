@@ -87,20 +87,21 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/cantidad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Cantidad"
-                    android:inputType="textPersonName" />
+                    android:inputType="number" />
 
                 <Button
                     android:id="@+id/button2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Agregar" />
+                    android:text="Agregar"
+                    android:onClick="agregarCarrito"/>
 
             </LinearLayout>
 

@@ -3,6 +3,8 @@ package co.edu.uis.conectacampo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,21 +21,29 @@ public class VistaProducto extends AppCompatActivity {
 
     private String post_key;
     private DatabaseReference mDatabase;
-
+    private TextView precioproducto;
+    private TextView nombreproducto;
+    private TextView usernombre;
+    private EditText cantidad;
+    private DatabaseReference mDatabasetotal;
+    private int totalsumar;
+    private int total;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_producto);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final TextView nombreproducto = (TextView) findViewById(R.id.nombre_productovista);
-        final TextView precioproducto = (TextView) findViewById(R.id.precioproductovista);
-        final TextView usernombre = (TextView) findViewById(R.id.nombreuservista);
+        nombreproducto =  findViewById(R.id.nombre_productovista);
+        precioproducto =  findViewById(R.id.precioproductovista);
+        usernombre =  findViewById(R.id.nombreuservista);
+        cantidad = findViewById(R.id.cantidad);
         final CircleImageView mCircle = (CircleImageView) findViewById(R.id.imagenproductovista);
 
 
         post_key = getIntent().getExtras().getString("ruta_id");
         mDatabase= FirebaseDatabase.getInstance().getReference().child("Producto").child(post_key);
+        mDatabasetotal = FirebaseDatabase.getInstance().getReference().child("Total");
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -44,6 +54,18 @@ public class VistaProducto extends AppCompatActivity {
                 Picasso.with(getApplicationContext()).load(dataSnapshot.child("imagen").getValue().toString()).into(mCircle);
 
 
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabasetotal.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                total = Integer.parseInt(dataSnapshot.getValue().toString());
             }
 
             @Override
@@ -65,5 +87,20 @@ public class VistaProducto extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void agregarCarrito(View v){
+
+        int valor = Integer.parseInt(precioproducto.getText().toString());
+        int cantidadsumar = Integer.parseInt(cantidad.getText().toString());
+        totalsumar = valor*cantidadsumar;
+
+
+
+        totalsumar=totalsumar+total;
+        mDatabasetotal.setValue(Integer.toString(totalsumar));
+
+        onBackPressed();
+
     }
 }

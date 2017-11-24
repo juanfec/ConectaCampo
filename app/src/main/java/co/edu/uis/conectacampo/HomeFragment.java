@@ -11,10 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class HomeFragment extends Fragment {
@@ -22,6 +27,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private DatabaseReference mDatabase;
+    private TextView mTotal;
+    private DatabaseReference mDatabasetotal;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -52,6 +59,11 @@ public class HomeFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
+
+        mTotal = v.findViewById(R.id.valor_total);
+
+        mDatabasetotal = FirebaseDatabase.getInstance().getReference().child("Total");
+
 
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -95,5 +107,19 @@ public class HomeFragment extends Fragment {
             }
         };
         mRecyclerView.setAdapter(firebaseRecyclerAdapter);
+
+        mDatabasetotal.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mTotal.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 }
