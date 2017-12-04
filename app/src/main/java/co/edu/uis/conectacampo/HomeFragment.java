@@ -30,18 +30,6 @@ public class HomeFragment extends Fragment {
     private TextView mTotal;
     private DatabaseReference mDatabasetotal;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,17 +37,14 @@ public class HomeFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_home,container, false);
 
 
-        Log.d("frag", "entre");
+        Log.e("frag", "entre");
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Producto");
 
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.productos_lista);
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mLayoutManager.setReverseLayout(true);
-        mLayoutManager.setStackFromEnd(true);
-
+        mLayoutManager= new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mTotal = v.findViewById(R.id.valor_total);
 
         mDatabasetotal = FirebaseDatabase.getInstance().getReference().child("Total");
@@ -75,14 +60,26 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<Producto,ProductosViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Producto, ProductosViewHolder>(
+        mDatabasetotal.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mTotal.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        FirebaseRecyclerAdapter<Producto,MainActivity.ProductosViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Producto, MainActivity.ProductosViewHolder>(
                 Producto.class,
                 R.layout.producto_simple,
-                ProductosViewHolder.class,
+                MainActivity.ProductosViewHolder.class,
                 mDatabase
         ) {
             @Override
-            protected void populateViewHolder(ProductosViewHolder viewHolder, Producto model, int position) {
+            protected void populateViewHolder(MainActivity.ProductosViewHolder viewHolder, Producto model, int position) {
 
                 final String post_key = getRef(position).getKey();
                 Log.e("error",post_key);
@@ -108,17 +105,7 @@ public class HomeFragment extends Fragment {
         };
         mRecyclerView.setAdapter(firebaseRecyclerAdapter);
 
-        mDatabasetotal.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mTotal.setText(dataSnapshot.getValue().toString());
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
 
     }

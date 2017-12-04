@@ -1,10 +1,14 @@
 package co.edu.uis.conectacampo;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,14 +18,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean viewIsAtHome;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
 
     @Override
@@ -43,6 +53,19 @@ public class MainActivity extends AppCompatActivity
         mDatabase= FirebaseDatabase.getInstance().getReference().child("Total");
         mDatabase.setValue("0");
 
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+                if(firebaseAuth.getCurrentUser() == null){
+                    Intent loginIntent = new Intent(MainActivity.this, Login.class);
+                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(loginIntent);
+                }
+            }
+        };
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -52,8 +75,49 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        displayView(R.id.nav_camera);
+        displayView(R.id.homeprincipal);
     }
+
+    public static class ProductosViewHolder extends RecyclerView.ViewHolder {
+
+        View mView;
+
+
+        public ProductosViewHolder(View itemView) {
+            super(itemView);
+
+            mView = itemView;
+
+
+        }
+
+        public void setNombre(String nombre)
+        {
+            TextView nombreproducto = mView.findViewById(R.id.nombre_producto);
+            nombreproducto.setText(nombre );
+
+        }
+
+        public void setPrecio(String precio){
+            TextView precioproducto = mView.findViewById(R.id.precioproducto);
+            precioproducto.setText(precio + " libra");
+        }
+
+        public void setUser(String user){
+            TextView usernombre = mView.findViewById(R.id.nombreuser);
+            usernombre.setText(user);
+
+        }
+
+        public void setImagen(final Context ctx, String imagen){
+            ImageView img = (ImageView) mView.findViewById(R.id.imagenproducto);
+            String image_url = imagen;
+            Picasso.with(ctx).load(image_url).into(img);
+
+        }
+
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -62,7 +126,7 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         }
         if (!viewIsAtHome) { //if the current view is not the Home fragment
-            displayView(R.id.nav_camera); //display the Home fragment
+            displayView(R.id.home); //display the Home fragment
         } else {
             moveTaskToBack(true);  //If view is in home fragment, exit application
         }
@@ -96,39 +160,52 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mAuth.addAuthStateListener(mAuthListener);
+
+    }
+
     public void displayView(int viewId) {
 
         Fragment fragment = null;
         String title = getString(R.string.app_name);
 
         switch (viewId) {
-            case R.id.nav_camera:
+            case R.id.homeprincipal:
                 fragment = new HomeFragment();
-                title  = getString(R.string.app_name);
+                title  = "";
                 viewIsAtHome = true;
 
                 break;
             case R.id.nav_gallery:
-               // fragment = new PerfilFragment();
-               // title = "Perfil";
-              //  viewIsAtHome = false;
+                fragment = new BlankFragment();
+                title = "Perfil";
+                viewIsAtHome = false;
                 break;
-            case R.id.nav_slideshow:
+         //   case R.id.nav_slideshow:
               //  fragment = new TusRutas();
               //  title = "Tus Rutas";
               //  viewIsAtHome = false;
-                break;
-            case R.id.nav_share:
+          //      break;
+          //  case R.id.nav_share:
               //  logout();
-                break;
+          //      break;
             /*case R.id.nav_tus_viajes:
                 fragment = new TusViajes();
                 title = "Tus Viajes";
                 viewIsAtHome = false;
                 break;*/
-            case R.id.nav_send:
+           // case R.id.nav_send:
                 //sendEmail();
                // viewIsAtHome = false;
+           //     break;
+            default:
+                fragment = new HomeFragment();
+                title  = "";
+                viewIsAtHome = true;
                 break;
         }
 
