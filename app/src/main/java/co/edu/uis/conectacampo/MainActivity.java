@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        mDatabase= FirebaseDatabase.getInstance().getReference().child("Total");
+        mDatabase= FirebaseDatabase.getInstance().getReference().child("Total");//establece referencia a una parte de la base de datos
         mDatabase.setValue("0");
 
         mAuth = FirebaseAuth.getInstance();
@@ -111,6 +111,52 @@ public class MainActivity extends AppCompatActivity
 
         public void setImagen(final Context ctx, String imagen){
             ImageView img = (ImageView) mView.findViewById(R.id.imagenproducto);
+            String image_url = imagen;
+            Picasso.with(ctx).load(image_url).into(img);
+
+        }
+
+    }
+
+    public static class CarritoViewHolder extends RecyclerView.ViewHolder {
+
+        View mView;
+
+
+        public CarritoViewHolder(View itemView) {
+            super(itemView);
+
+            mView = itemView;
+
+
+        }
+
+        public void setNombre(String nombre)
+        {
+            TextView nombreproducto = mView.findViewById(R.id.nombrecarrito);
+            nombreproducto.setText(nombre );
+
+        }
+
+        public void setPrecio(String precio){
+            TextView precioproducto = mView.findViewById(R.id.preciocarrito);
+            precioproducto.setText(precio + " libra");
+        }
+
+        public void setCantidad(String user){
+            TextView usernombre = mView.findViewById(R.id.cantidadcarrito);
+            usernombre.setText(user);
+
+        }
+
+        public void setTotal(String user){
+            TextView usernombre = mView.findViewById(R.id.totalcarrito);
+            usernombre.setText(user);
+
+        }
+
+        public void setImagen(final Context ctx, String imagen){
+            ImageView img = (ImageView) mView.findViewById(R.id.imagencarrito);
             String image_url = imagen;
             Picasso.with(ctx).load(image_url).into(img);
 
@@ -190,9 +236,9 @@ public class MainActivity extends AppCompatActivity
               //  title = "Tus Rutas";
               //  viewIsAtHome = false;
           //      break;
-          //  case R.id.nav_share:
-              //  logout();
-          //      break;
+            case R.id.nav_share:
+                logout();
+                break;
             /*case R.id.nav_tus_viajes:
                 fragment = new TusViajes();
                 title = "Tus Viajes";
@@ -225,6 +271,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
+    }
+
+    private void logout() {
+
+        mAuth.signOut();
     }
 
 }
