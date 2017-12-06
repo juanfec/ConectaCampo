@@ -75,8 +75,23 @@ public class HomeFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();//inicializa auth para maneho de usuario
 
         mDatabasetotal = FirebaseDatabase.getInstance().getReference().child("Total");//establece referencia a una parte de la base de datos
-        mDatabaseCarritoUser = FirebaseDatabase.getInstance().getReference().child("Carrito").child(mAuth.getCurrentUser().getUid());//establece referencia a una parte de la base de datos
-        mUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabaseCarritoUser = FirebaseDatabase.getInstance().getReference().child("Carrito").child(mAuth.getCurrentUser().getUid().toString());//establece referencia a una parte de la base de datos
+
+            mUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        }
+        else
+        {
+            mDatabaseCarritoUser = FirebaseDatabase.getInstance().getReference().child("Carrito");//establece referencia a una parte de la base de datos
+
+            mUser = FirebaseDatabase.getInstance().getReference().child("Users");
+        }
+
+
+
+
 
 
         mRecyclerViewCarrito.setLayoutManager(mLayoutManagerCarrito);
