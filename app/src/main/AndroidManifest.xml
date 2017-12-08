@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".VistaProducto" />
         <activity android:name=".Registro" />
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Login" />
+        <activity android:name=".RegistroProducto"></activity>
     </application>
 
 </manifest>
