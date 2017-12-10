@@ -132,7 +132,6 @@ public class HomeFragment extends Fragment {
 
 
 
-
         //adaptador necesario para llenar recyclerview
         FirebaseRecyclerAdapter<Producto,MainActivity.ProductosViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Producto, MainActivity.ProductosViewHolder>(
                 Producto.class,

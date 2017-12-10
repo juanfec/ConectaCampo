@@ -45,8 +45,12 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                Intent registo = new Intent(MainActivity.this,MetodoDePago.class);
+                startActivity(registo);
+
+              //  Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+               //         .setAction("Action", null).show();
             }
         });
 
@@ -215,6 +219,13 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public void agregarProducto()
+    {
+        Intent agregarproducto = new Intent(getApplicationContext(),RegistroProducto.class);
+        startActivity(agregarproducto);
+
+    }
+
     public void displayView(int viewId) {
 
         Fragment fragment = null;
@@ -228,9 +239,7 @@ public class MainActivity extends AppCompatActivity
 
                 break;
             case R.id.nav_gallery:
-                fragment = new BlankFragment();
-                title = "Perfil";
-                viewIsAtHome = false;
+                agregarProducto();
                 break;
          //   case R.id.nav_slideshow:
               //  fragment = new TusRutas();
